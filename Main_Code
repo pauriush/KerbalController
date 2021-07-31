@@ -8,8 +8,23 @@ KerbalSimpit mySimplit(Serial); //Creation of a KerbalSimpit object.
 void setup() {
   Serial.begin(115200); //Initialisation of the Serial.
   while (!mySimpit.init()); //Initialisation of the KerbalSimpit object.
+
+  mySimpit.inboundHandler(myCallbackHandler);
 }
 
 void loop() {
+  mySimpit.update();
+}
 
+void myCallbackHandler(byte messageType, byte message[], byte messageSize){
+  switch(messageType) {
+    case APSIDES_MESSAGE:
+      if (msgSize == sizeof(apsidesMessage)) {
+        apsidesMessage myApsides;
+        myApsides = parseApsides(msg);
+        Serial.print("Apoapsis: " + myApsides.apoapsis + ", Periapsis: " + myApsides.periapsis);
+        delay(1000);
+      }
+    break;
+  }
 }
